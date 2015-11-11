@@ -17,7 +17,7 @@
     sort($foldercontent, SORT_NATURAL);
     foreach ($foldercontent as $item) {
       // print("item: $item\n");
-      if ("$item" === "." or "$item" === "..") continue;
+      if ("$item" === "." or "$item" === ".." or "$item" === ".git") continue;
       $absitem = "$dir/$item";
       if (is_dir($absitem)) {
         $directories[] = "$item";
