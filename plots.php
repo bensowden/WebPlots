@@ -159,9 +159,12 @@
       $( element ).on('click', function(event) {
         // Change content
         $("#plots").empty().append(makeTable(categories, this.value));
-
+        // Change URL
         var newURL = window.location.pathname + "?sel=" + this.value;
         history.replaceState({}, "", newURL);
+        // Colour button text
+        $("input").each(function( index, element ) {$(element).css("color", "")});
+        $( this ).css("color", "Red");
       })
     });
 
@@ -169,6 +172,10 @@
     var index = Object.keys(categories)[0];
     if (param) {index = param;}
     $("#plots").empty().append(makeTable(categories, index));
+    // Colour button text
+    $("input").each(function(thisIndex,element) {
+      if (element.value === index) { $(element).css("color", "Red") }
+    });
 
   });
 </script>
