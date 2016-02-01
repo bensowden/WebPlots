@@ -66,47 +66,29 @@
     return false;
   }
 
-  function tableRow(imga, imgb) {
-
-    var row = "<tr>";
-    row += "<td><img src=\"";
-    row += imga;
-    row += "\" height=\"325\" /></td>";
-    row += "<td></td>";
-    if (imgb !== "") {
-      row +="<td><img src=\"";
-      row += imgb;
-      row += "\" height=\"325\" /></td>";
-    }
-    row += "</tr>";
-
-    return row;
-  }
-
-  function makeTable(categories, index) {
+  function plotHTML(categories, index) {
     var thisplots = categories[index];
-    var table = ""
+    var html = ""
 
     if (thisplots && thisplots.length >= 1) {
 
       // Make title
-      table += "<table><tr>";
-      table += "<td colspan=\"3\"><span class=\"tablaTitle\">";
-      table += index;
-      table += "</span></td></tr>";
+      html += "</br>";
+      html += index;
+      html += "</br>";
 
-      for (var i = 0; i < thisplots.length; i += 2) {
-        if (i !== thisplots.length-1) table += tableRow(thisplots[i], thisplots[i+1]);
-        else                          table += tableRow(thisplots[i], "" );
+      for (var i = 0; i < thisplots.length; i += 1) {
+        html += "<img src=\"";
+        html += thisplots[i];
+        html += "\" height=\"275\" />";
       }
-      table += "</table>";
     } else {
-      table += "</br><big>No plots found in ";
-      table += index;
-      table += ":(</big></br>";
+      html += "</br><big>No plots found in ";
+      html += index;
+      html += ":(</big></br>";
     }
 
-    return table;
+    return html;
 
   }
 
@@ -158,7 +140,7 @@
       // Add listener for clicking button
       $( element ).on('click', function(event) {
         // Change content
-        $("#plots").empty().append(makeTable(categories, this.value));
+        $("#plots").empty().append(plotHTML(categories, this.value));
         // Change URL
         var newURL = window.location.pathname + "?sel=" + this.value;
         history.replaceState({}, "", newURL);
@@ -171,7 +153,7 @@
     var param = getUrlParameters("sel");
     var index = Object.keys(categories)[0];
     if (param) {index = param;}
-    $("#plots").empty().append(makeTable(categories, index));
+    $("#plots").empty().append(plotHTML(categories, index));
     // Colour button text
     $("input").each(function(thisIndex,element) {
       if (element.value === index) { $(element).css("color", "Red") }
@@ -181,4 +163,3 @@
 </script>
 </body>
 </html>
-
