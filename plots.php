@@ -13,7 +13,8 @@
 <?php
 
   // Used for debugging the php
-  /*ini_set('display_errors', 1);
+  /*echo 'Current PHP version: ' . phpversion();
+  ini_set('display_errors', 1);
   ini_set('display_startup_errors', 1);
   error_reporting(E_ALL);*/
 
