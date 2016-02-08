@@ -11,6 +11,12 @@
 <div id="plots"></div>
 
 <?php
+
+  // Used for debugging the php
+  /*ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);*/
+
   function FindDirs($dir) {
     $directories = array();
     $foldercontent = scandir($dir);
