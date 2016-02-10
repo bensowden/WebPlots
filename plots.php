@@ -85,9 +85,11 @@
       html += "</br>";
 
       for (var i = 0; i < thisplots.length; i += 1) {
-        html += "<img src=\"";
+        html += "<a href=\"";
         html += thisplots[i];
-        html += "\" height=\"275\" />";
+        html += "\"><img src=\"";
+        html += thisplots[i];
+        html += "\" height=\"275\" /></a>";
       }
     } else {
       html += "</br><big>No plots found in ";
