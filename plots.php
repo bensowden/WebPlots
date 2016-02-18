@@ -21,7 +21,7 @@
   function FindDirs($dir) {
     $directories = array();
     $foldercontent = scandir($dir);
-    sort($foldercontent, SORT_NATURAL);
+    natsort($foldercontent);
     foreach ($foldercontent as $item) {
       // print("item: $item\n");
       if ("$item" === "." or "$item" === ".." or "$item" === ".git") continue;
@@ -37,11 +37,25 @@
     return $directories;
   }
 
-  function findImages($folder) {
+  function FindImages($folder, $filters = array(), $excludes = array()) {
     $images = array();
     $files = scandir($folder);
     foreach ($files as $file) {
       if (substr($file, -4) === ".svg" or substr($file, -4) === ".png") {
+        $skip = False;
+        foreach ($filters as $filter) {
+          if (!strpos("$folder/$file",$filter)) {
+            $skip = True;
+            break;
+          }
+        }
+        foreach ($excludes as $exclude) {
+          if (strpos("$folder/$file",$exclude)) {
+            $skip = True;
+            break;
+          }
+        }
+        if ($skip) {continue;}
         $images[] = "$folder/$file";
       }
     }
@@ -49,15 +63,58 @@
     return $images;
   }
 
-  $directories = FindDirs("./");
+  // Make file names array key, useful for plot comparison
+  function FileNameArray($array, $removeIndicies = array(), $fixButtonFunction = "") {
+    $newarray = array();
+    foreach ($array as $i => $value) {
+      foreach ($value as $plot) {
+        $folders = explode("/", $plot);
+        $filename = array_pop($folders);
+        $filename = substr($filename, 0, strlen($filename) - 4);
+        foreach ($removeIndicies as $removeIndex) {
+          unset($folders[$removeIndex]);
+        }
+        $button = implode("/",$folders);
+        $button = "$button/$filename";
+        if ($fixButtonFunction !== "") {
+          $button = $fixButtonFunction($button);
+        }
+        if (array_key_exists($button, $newarray)) {
+          $newarray[$button][] = $plot;
+        } else {
+          $newarray[$button] = array($plot);
+        }
+      }
+    }
+    return $newarray;
+  }
+
+  // Way to have different display name to actual name
+  function FixButton($button) {
+    // Example usage:
+    // $button = str_replace("geq2j","2ji", $button);
+    // $button = str_replace("geq2b","2bi", $button);
+    // $button = str_replace("geq4j","4ji", $button);
+    // $button = str_replace("geq4b","4bi", $button);
+    return $button;
+  }
+
+  $baseDir = "./"
+  $directories = FindDirs($baseDir);
+  // Strings go in arrays to selectively choose buttons
+  $filter = array();
+  $exclude = array();
   $categories = array();
-  foreach ($directories as $dir) {
+  foreach ($baseDir as $dir) {
     // print("$dir\n");
-    $images = findImages($dir);
+    $images = findImages("$baseDir/$dir", $filter, $exclude);
     if (count($images) !== 0) {
-      $categories[$dir] = $images;
+      $button = FixButton($dir);
+      $categories[$button] = $images;
     }
   }
+  // Example usage of File Name Array:
+  // $categories = FileNameArray($categories, array(0,1,2,3), 'FixButton');
 ?>
 
 <script>
