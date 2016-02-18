@@ -105,7 +105,7 @@
   $filter = array();
   $exclude = array();
   $categories = array();
-  foreach ($baseDir as $dir) {
+  foreach ($directories as $dir) {
     // print("$dir\n");
     $images = findImages("$baseDir/$dir", $filter, $exclude);
     if (count($images) !== 0) {
