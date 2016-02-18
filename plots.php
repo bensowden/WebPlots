@@ -99,7 +99,7 @@
     return $button;
   }
 
-  $baseDir = "./"
+  $baseDir = "./";
   $directories = FindDirs($baseDir);
   // Strings go in arrays to selectively choose buttons
   $filter = array();
